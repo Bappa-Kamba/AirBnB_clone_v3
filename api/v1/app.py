@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+"""
+Initializes the app module
+"""
 from api.v1.views import app_views
 from flask import Flask
 from models import storage
