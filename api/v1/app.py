@@ -19,6 +19,10 @@ def teardown_db(self):
     storage.close()
 
 
+@app.errorhandler(404)
+def resource_not_found(error):
+    """Return a custom 404 error"""
+    return {"error": "Not found"}, 404
 
 
 if __name__ == '__main__':
