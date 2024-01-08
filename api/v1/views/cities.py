@@ -15,7 +15,7 @@ def cities(state_id):
     Return cities object as objects using the `to_dict()` method
     """
     state = storage.get(State, state_id)
-    print(state.name)
+    print(state)
     if state is None:
         return jsonify({"error": "Not found"}), 404
     return jsonify([
