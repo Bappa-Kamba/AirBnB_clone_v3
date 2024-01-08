@@ -16,3 +16,29 @@ def states():
     return jsonify([
         state.to_dict() for state in storage.all(State).values()
         ])
+
+
+@app_views.route("/states/<string:state_id>", strict_slashes=False)
+def state(state_id):
+    """
+    Return a state object as JSON
+    """
+    state = storage.get(State, state_id)
+    if state is None:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify(state.to_dict())
+
+
+@app_views.route("/states/<string:state_id>", methods=["DELETE"])
+def delete_state(state_id):
+    """
+    Deletes a State object by id
+    """
+    state = storage.get(State, state_id)
+    if state is None:
+        return jsonify({
+            "error": "Not found"
+        }), 404
+    state.delete()
+    storage.save()
+    return jsonify({}), 200
