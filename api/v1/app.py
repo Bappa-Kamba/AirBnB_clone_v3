@@ -3,7 +3,7 @@
 Initializes the app module
 """
 from api.v1.views import app_views
-from flask import Flask
+from flask import Flask, jsonify
 from models import storage
 from os import getenv
 
@@ -22,7 +22,9 @@ def teardown_db(self):
 @app.errorhandler(404)
 def resource_not_found(error):
     """Return a custom 404 error"""
-    return {"error": "Not found"}, 404
+    return jsonify({
+        "error": "Not found"
+        }), 404
 
 
 if __name__ == '__main__':
