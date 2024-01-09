@@ -3,7 +3,11 @@
     View module for Amenity objects
 """
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import (
+    abort,
+    jsonify,
+    request
+)
 from models import storage
 from models.amenity import Amenity
 
@@ -25,7 +29,7 @@ def amenity(amenity_id):
     """
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
-        return jsonify({"error": "Not found"}), 404
+        abort(404)
     return jsonify(amenity.to_dict())
 
 
@@ -37,8 +41,8 @@ def create_amenity():
     """
     amenity = Amenity(**request.get_json())
     if not amenity.name:
-        return jsonify({
-            "error": "Missing name",
-        }), 400
+        abort(400, "Missing name")
     amenity.save()
     return jsonify(amenity.to_dict()), 201
+
+
