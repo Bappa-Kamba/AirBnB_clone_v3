@@ -3,7 +3,11 @@
     View module for the State objects
 """
 from api.v1.views import app_views
-from flask import jsonify, request, abort
+from flask import (
+    abort,
+    jsonify,
+    request,
+)
 from models import storage
 from models.state import State
 
