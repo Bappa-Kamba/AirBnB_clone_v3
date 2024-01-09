@@ -67,8 +67,35 @@ test_db_storage.py'])
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
 
+
 class TestDBStorage(unittest.TestCase):
     """Test the FileStorage class"""
+
+    def setUp(self):
+        """Set up for the tests"""
+        # Get the database name from environment variable
+        self.HBNB_MYSQL_USER = os.getenv('HBNB_MYSQL_USER')
+        self.HBNB_MYSQL_PWD = os.getenv('HBNB_MYSQL_PWD')
+        self.HBNB_MYSQL_HOST = os.getenv('HBNB_MYSQL_HOST')
+        self.HBNB_MYSQL_DB = os.getenv('HBNB_MYSQL_DB')
+        self.HBNB_ENV = os.getenv('HBNB_ENV')
+
+        self.storage = models.storage
+        self.storage.reload()  # Connect to the database
+
+        # Insert some test data
+        for i in range(10):
+            state = State(name=f"State{i}")
+            self.storage.new(state)
+        self.storage.save()
+
+    def tearDown(self):
+        """Clean up after tests"""
+        self.storage = models.storage
+        for obj in self.storage.all().values():
+            self.storage.delete(obj)
+        self.storage.save()
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -86,28 +113,27 @@ class TestDBStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count_all_objects(self):
         """Test counting all objects in storage"""
-        storage = DBStorage()
         # Add some objects to storage
-        # ...
         expected_count = 10  # Example value, replace with the actual expected count
-        count = storage.count()
+        count = self.storage.count(State)
         self.assertEqual(count, expected_count)
 
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count_objects_by_class(self):
         """Test counting objects of a specific class in storage"""
-        storage = DBStorage()
         # Add some objects to storage
         # ...
         SomeClass = State  # Replace with the actual class you want to test
         expected_count = 5  # Example value, replace with the actual expected count
-        count = storage.count(cls=SomeClass)
+        count = self.storage.count(cls=SomeClass)
         self.assertEqual(count, expected_count)
 
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count_invalid_class(self):
         """Test counting objects with an invalid class"""
-        storage = DBStorage()
         InvalidClass = InvalidClass  # Replace with the actual invalid class you want to test
-        count = storage.count(cls=InvalidClass)
+        count = self.storage.count(cls=InvalidClass)
         self.assertEqual(count, 0)
