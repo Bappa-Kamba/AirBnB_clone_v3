@@ -19,7 +19,7 @@ def users():
     """
     return jsonify([
         user.to_dict() for user in storage.all(User).values()
-        ])
+    ])
 
 
 @app_views.route("/users/<string:user_id>", strict_slashes=False)
@@ -34,7 +34,7 @@ def user(user_id):
 
 
 @app_views.route("/users/<string:user_id>", methods=["DELETE"],
-                    strict_slashes=False)
+                 strict_slashes=False)
 def delete_user(user_id):
     """
     Deletes a User object by id
@@ -65,7 +65,7 @@ def create_user():
 
 
 @app_views.route("/users/<string:user_id>", methods=["PUT"],
-                    strict_slashes=False)
+                 strict_slashes=False)
 def update_user(user_id):
     """
     Updates a User object

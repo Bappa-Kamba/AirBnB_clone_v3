@@ -52,7 +52,7 @@ def delete_review(review_id):
 
 
 @app_views.route("/places/<string:place_id>/reviews", methods=["POST"],
-                    strict_slashes=False)
+                 strict_slashes=False)
 def create_review(place_id):
     """
     Creates a Review
@@ -76,7 +76,7 @@ def create_review(place_id):
 
 
 @app_views.route("/reviews/<string:review_id>", methods=["PUT"],
-                    strict_slashes=False)
+                 strict_slashes=False)
 def update_review(review_id):
     """
     Updates a Review object
@@ -88,7 +88,11 @@ def update_review(review_id):
         abort(400, "Not a JSON")
 
     for key, value in request.get_json().items():
-        if key not in ["id", "user_id", "place_id", "created_at", "updated_at"]:
+        if key not in [
+            "id", "user_id",
+            "place_id", "created_at",
+            "updated_at"
+        ]:
             setattr(review, key, value)
     review.save()
     return jsonify(review.to_dict()), 200

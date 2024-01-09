@@ -33,7 +33,7 @@ def amenity(amenity_id):
     return jsonify(amenity.to_dict())
 
 
-@app_views.route("/amenities", methods={"POST"}, 
+@app_views.route("/amenities", methods={"POST"},
                  strict_slashes=False)
 def create_amenity():
     """
