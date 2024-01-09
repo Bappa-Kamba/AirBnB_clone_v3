@@ -52,7 +52,7 @@ def delete_place(place_id):
 
 
 @app_views.route("/cities/<string:city_id>/places", methods=["POST"],
-                    strict_slashes=False)
+                 strict_slashes=False)
 def create_place(city_id):
     """
     Creates a Place
@@ -77,7 +77,7 @@ def create_place(city_id):
 
 
 @app_views.route("/places/<string:place_id>", methods=["PUT"],
-                    strict_slashes=False)
+                 strict_slashes=False)
 def update_place(place_id):
     """
     Updates a Place object
