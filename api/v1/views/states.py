@@ -3,7 +3,7 @@
     View module for the State objects
 """
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from models import storage
 from models.state import State
 
@@ -25,7 +25,7 @@ def state(state_id):
     """
     state = storage.get(State, state_id)
     if state is None:
-        return jsonify({"error": "Not found"}), 404
+        abort(404)
     return jsonify(state.to_dict())
 
 
@@ -37,9 +37,7 @@ def delete_state(state_id):
     """
     state = storage.get(State, state_id)
     if state is None:
-        return jsonify({
-            "error": "Not found"
-        }), 404
+        abort(404)
     state.delete()
     storage.save()
     return jsonify({}), 200
@@ -52,9 +50,7 @@ def create_state():
     """
     state = State(**request.get_json())
     if not state.name:
-        return jsonify({
-            "error": "Missing name",
-        }), 400
+        abort(400, "Missing name")
     state.save()
     return jsonify(state.to_dict()), 201
 
@@ -67,9 +63,7 @@ def update_state(state_id):
     """
     state = storage.get(State, state_id)
     if state is None:
-        return jsonify({
-            "error": "Not found"
-        }), 404
+        abort(404)
     for key, value in request.get_json().items():
         if key not in ["id", "created_at", "updated_at"]:
             setattr(state, key, value)
