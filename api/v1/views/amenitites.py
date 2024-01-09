@@ -39,6 +39,9 @@ def create_amenity():
     """
     Creates an Amenity for a Place
     """
+    if not request.is_json:
+        abort(400, "Not a JSON")
+
     amenity = Amenity(**request.get_json())
     if not amenity.name:
         abort(400, "Missing name")
@@ -46,3 +49,35 @@ def create_amenity():
     return jsonify(amenity.to_dict()), 201
 
 
+@app_views.route("/amenities/<amenity_id>",
+                 methods=["DELETE"],
+                 strict_slashes=False)
+def delete_amenity(amenity_id):
+    """
+    Deletes an Amenity object by id
+    """
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
+    amenity.delete()
+    storage.save()
+    return jsonify({}), 200
+
+
+@app_views.route("/amenities/<amenity_id>", methods=["PUT"],
+                 strict_slashes=False)
+def update_amenity(amenity_id):
+    """
+    Updates an Amenity object
+    """
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
+    if not request.is_json:
+        abort(400, "Not a JSON")
+
+    for attr, val in request.get_json().items():
+        if attr not in ["id", "created_at", "updated_at"]:
+            setattr(amenity, attr, val)
+    amenity.save()
+    return jsonify(amenity.to_dict()), 200
