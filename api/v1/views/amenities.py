@@ -34,7 +34,7 @@ def amenity(amenity_id):
 
 
 @app_views.route("/amenities", methods={"POST"}, 
-                 strict_slash=False)
+                 strict_slashes=False)
 def create_amenity():
     """
     Creates an Amenity for a Place
